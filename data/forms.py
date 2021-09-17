@@ -10,6 +10,7 @@ class YesNoForm(FlaskForm):
 
 class StartForm(FlaskForm):
     submit = SubmitField("Готово")
+    cancel = SubmitField("Отмена")
 
 
 class LoginForm(StartForm):

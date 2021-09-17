@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block body %}
+<h2>Все заказы</h2>
+{% if orders == [] %}
+<h3>Еще не сделано ни одного заказа</h3>
+{% else %}
+<table width="100%">
+{% for order in orders %}
+<tr>
+  <td>
+    <a href="/order_details/{{order['id']}}" class="nav-link px-2 text-muted"><strong class="d-block text-gray-dark">{{order['email']}}</strong></a>
+  </td>
+  <td>
+    {{order['name']}}
+  </td>
+  <td>
+    {{order['middle_name']}}
+  </td>
+  <td>
+    {{order['surname']}}
+  </td>
+  <td>
+    {{order['birthday']}}
+  </td>
+  <td>
+    {{order['status']}}
+  </td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+{% endblock %}

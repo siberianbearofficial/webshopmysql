@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1>Заказ - {{order['id']}}</h1>
+<p>Email - {{order['email']}}</p>
+<p>Имя - {{order['name']}}</p>
+<p>Отчество - {{order['middle_name']}}</p>
+<p>Фамилия - {{order['surname']}}</p>
+<p>Дата рождения - {{order['birthday']}}</p>
+{% if items == [] %}
+<p>Этот человек ничего не заказал, то есть он <strong>дебил малолетний</strong></p>
+{% else %}
+<table width="100%">
+{% for item in items %}
+<tr>
+  <td>
+    <a href="/item_description/{{item['id']}}" class="nav-link px-2 text-muted"><strong class="d-block text-gray-dark">{{item['name']}}</strong></a>
+  </td>
+  <td>
+    {{item['price']}}$
+  </td>
+  <td>
+    {{item['count']}} in stock
+  </td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+<form action="/change_order_status" method="get">
+  <label>
+    Статус заказа
+    <input type="number" value="{{order['status']}}">
+  </label><br>
+  <label>
+    ID (по умолчанию - открытый заказ)
+    <input type="number" value="{{order['id']}}">
+  </label><br>
+  <button type="submit">Изменить</button>
+</form>
+{% endblock %}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+<body>
+<h1>Here you can add, edit or remove items, change user's access and change about info.</h1>
+<h2>Create an admin</h2>
+<form method="get" action="/create_admin">
+    <label>
+        Username
+        <input type="email" name="username" id="username">
+    </label>
+    <button type="submit">Create</button>
+</form>
+<h2>Add an item</h2>
+<form method="get" action="/create">
+    <label>
+        Name
+        <input type="text" name="name" id="name">
+    </label>
+    <label>
+        Description
+        <input type="text" name="description" id="description">
+    </label>
+    <label>
+        Price
+        <input type="number" name="price" id="price">
+    </label>
+    <label>
+        Count
+        <input type="number" name="count" id="count">
+    </label>
+    <button type="submit">Add</button>
+</form>
+<h2>Remove an item</h2>
+<form method="get" action="/remove">
+    <label>
+        Item id
+        <input type="number" name="item_id" id="item_id">
+    </label>
+    <button type="submit">Remove</button>
+</form>
+<h2>Change about</h2>
+<form method="get" action="/change_about">
+    <label>
+        About
+        <input type="text" name="about" id="about" value="{{content}}">
+    </label>
+    <button type="submit">Change</button>
+</form>
+</body>
+</html>

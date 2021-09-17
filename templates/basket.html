@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+{% block big_title %}<h2>Корзина</h2>{% endblock %}
+{% block order %}
+{% if items == [] %}
+<p>Корзина пуста. Вы можете начать выбирать товары прямо сейчас! Нажмите <a href="/">сюда</a></p>
+{% else %}
+<h3>Оформление заказа</h3>
+<form action="/order" method="post">
+    <label for="name">Name</label><input type="text" name="name" id="name"><br>
+    <label for="middlename">Middle name</label><input type="text" name="middlename" id="middlename"><br>
+    <label for="surname">Surname</label><input type="text" name="surname" id="surname"><br>
+    <label for="birthday">Your date of the birth</label><input type="date" name="birthday" id="birthday"><br>
+    <button type="submit">Order</button>
+</form>
+<p>Самовывоз производится по адресу: Москва, м.Коммунарка. Дату и время получения, а также другие детали заказа будут отправлены на указанную в профиле электронную почту.</p>
+{% endif %}
+{% endblock %}
