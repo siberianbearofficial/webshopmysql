@@ -171,7 +171,7 @@ def item_description_page(item_id):
     item = get_item(item_id)
     if item is None:
         return redirect('/')
-    return render_page('item_description.html', item=item, title=item['name'] + ' - описание')
+    return render_page('item_description.html', item=item, title=item.name + ' - описание')
 
 
 @app.route('/order_details/<int:order_id>')
@@ -185,6 +185,17 @@ def order_details_page(order_id):
         return render_page('order_details.html', order=order, title='Заказ ' + str(order.id), items=items)
     else:
         return redirect('/')
+
+
+@app.route('/change_order_status')
+@login_required
+def change_order_status_page():
+    if not is_admin():
+        return redirect('/')
+    order_id = request.args['order_id']
+    status = request.args['status']
+    print(change_order_status(order_id, status))
+    return redirect('/all_orders')
 
 
 @app.route('/all_orders')

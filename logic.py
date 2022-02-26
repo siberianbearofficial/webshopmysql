@@ -8,6 +8,7 @@ from data.shop import Shop
 from data.order import Order
 
 split_for_basket = '|||'
+split_for_basket_btw_items = '--'
 
 
 def login(login_form):
@@ -88,9 +89,23 @@ def add_item_to_basket(item_id):
     session = db_session.create_session()
     user = session.query(User).filter(User.email == current_user.email).first()
     if user.basket is not None and user.basket != '':
-        user.basket += (split_for_basket + str(item_id))
+        new_basket = ''
+        flag = False
+        for item_in_basket in user.basket.split(split_for_basket):
+            item_in_basket_split = item_in_basket.split(split_for_basket_btw_items)
+            if item_in_basket_split[0] == item_id:
+                item_in_basket_split[1] = str(int(item_in_basket_split[1]) + 1)
+                flag = True
+            if new_basket != '':
+                new_basket += (split_for_basket + item_in_basket_split[0])
+                new_basket += (split_for_basket_btw_items + item_in_basket_split[1])
+            else:
+                new_basket = item_in_basket_split[0] + split_for_basket_btw_items + item_in_basket_split[1]
+        if not flag:
+            new_basket += (split_for_basket + str(item_id) + split_for_basket_btw_items + '1')
+        user.basket = new_basket
     else:
-        user.basket = str(item_id)
+        user.basket = str(item_id) + split_for_basket_btw_items + '1'
     session.commit()
     session.close()
     return 'OK'
@@ -99,12 +114,16 @@ def add_item_to_basket(item_id):
 def remove_item_from_basket(item_id):
     session = db_session.create_session()
     user = session.query(User).filter(User.email == current_user.email).first()
-    for id_in_basket in user.basket.split(split_for_basket):
-        if id_in_basket != item_id:
-            if user.basket is not None and user.basket != '':
-                user.basket += (split_for_basket + str(id_in_basket))
-            else:
-                user.basket = str(id_in_basket)
+    new_basket = ''
+    if user.basket is not None and user.basket != '':
+        for item_in_basket in user.basket.split(split_for_basket):
+            id_in_basket = item_in_basket.split(split_for_basket_btw_items)[0]
+            if id_in_basket != item_id:
+                if new_basket != '':
+                    new_basket += (split_for_basket + str(item_in_basket))
+                else:
+                    new_basket = str(item_in_basket)
+    user.basket = new_basket
     session.commit()
     session.close()
     return 'OK'
@@ -113,12 +132,16 @@ def remove_item_from_basket(item_id):
 def remove_item_from_basket_user(item_id, user_got):
     session = db_session.create_session()
     user = session.query(User).filter(User.email == user_got.email).first()
-    for id_in_basket in user.basket.split(split_for_basket):
-        if id_in_basket != item_id:
-            if user.basket is not None and user.basket != '':
-                user.basket += (split_for_basket + str(id_in_basket))
-            else:
-                user.basket = str(id_in_basket)
+    new_basket = ''
+    if user.basket is not None and user.basket != '':
+        for item_in_basket in user.basket.split(split_for_basket):
+            id_in_basket = item_in_basket.split(split_for_basket_btw_items)[0]
+            if id_in_basket != item_id:
+                if new_basket != '':
+                    new_basket += (split_for_basket + str(item_in_basket))
+                else:
+                    new_basket = str(item_in_basket)
+    user.basket = new_basket
     session.commit()
     session.close()
     return 'OK'
@@ -133,7 +156,9 @@ def get_items_from_basket():
         session.commit()
         session.close()
         basket = ''
-    ids = basket.split(split_for_basket)
+    ids = []
+    for item in basket.split(split_for_basket):
+        ids.append(item.split(split_for_basket_btw_items))
     items_list = []
     if len(ids) > 0:
         all_items = get_all_items()
@@ -227,3 +252,12 @@ def get_items_from_order(order):
     for item_id in item_ids:
         item_list.append(session.query(Item).filter(Item.id == item_id).first())
     return item_list
+
+
+def change_order_status(order_id, status):
+    session = db_session.create_session()
+    order = session.query(Order).filter(Order.id == order_id).first()
+    order.status = status
+    session.commit()
+    session.close()
+    return 'OK'

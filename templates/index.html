@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block body %}
-{% block big_title %}{% endblock %}
 <table width="100%">
 {% for item in items %}
 <tr>
@@ -13,8 +12,10 @@
   <td>
     {{item['count']}} in stock
   </td>
+  <td>
+    <a href="/add_item_to_basket/{{item['id']}}" class="nav-link px-2 text-muted">Добавить козину</a>
+  </td>
 </tr>
 {% endfor %}
 </table>
-{% block order %}{% endblock %}
 {% endblock %}
